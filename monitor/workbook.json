@@ -1,0 +1,114 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Azure RAG Agent (ADK) \u2014 Operations Dashboard"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "requests\n| where timestamp > ago(24h)\n| where name == 'process_query'\n| summarize count_=count(), p50=percentile(duration,50), p95=percentile(duration,95), err_rate=100.0*sumif(tostring(resultCode) !in ('200','202'),1)/count() by bin(timestamp, 5m)\n| render timechart",
+        "size": 1,
+        "title": "API Latency & Error Rate (p50/p95)"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "traces\n| where timestamp > ago(24h)\n| where message has 'tool_success'\n| extend tool=tostring(parse_json(message).tool), latency=todouble(parse_json(message).latency)\n| summarize avg_latency=avg(latency), p95_latency=percentile(latency,95), calls=count() by tool\n| order by avg_latency desc",
+        "size": 0,
+        "title": "Tool latency & call volume"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "traces\n| where timestamp > ago(24h)\n| where message contains \"Cache hit for\" or message contains \"Cache miss\"\n| extend hit = iif(message contains \"Cache hit\", 1, 0)\n| summarize hits=sum(hit), total=count(), hit_rate=100.0*sum(hit)/count() by bin(timestamp, 15m)\n| render timechart",
+        "size": 1,
+        "title": "Cache hit rate over time"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "traces\n| where timestamp > ago(24h)\n| where message contains \"Circuit\" \n| project timestamp, message\n| order by timestamp desc",
+        "size": 0,
+        "title": "Circuit breaker events"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "traces\n| where timestamp > ago(24h)\n| where message contains \"cost_meter\" or message contains \"\\\"spent\\\"\" \n| extend spent = todouble(extract(@\"\\\"spent\\\":\\s*([0-9.]+)\", 1, message))\n| summarize total_spend=sum(spent), avg_spend=avg(spent), p95_spend=percentile(spent,95) by bin(timestamp, 1h)\n| render timechart",
+        "size": 1,
+        "title": "Cost per hour (sum/avg/p95)"
+      }
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Dependencies (from App Insights)"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "dependencies\n| where timestamp > ago(24h)\n| summarize calls=count(), avg_dur=avg(duration), p95=percentile(duration,95) by target\n| order by calls desc",
+        "size": 0,
+        "title": "External dependencies (AI Search, Cosmos, Synapse, AOAI)"
+      }
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## APIM & Front Door"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where TimeGenerated > ago(24h)\n| where ResourceProvider == \"MICROSOFT.APIMANAGEMENT\"\n| summarize requests=count(), errors=sumif(1, toint(StatusCode) >= 500), p95=percentile(DurationMs,95) by bin(TimeGenerated, 15m)\n| render timechart",
+        "size": 1,
+        "title": "APIM requests/errors/p95"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where TimeGenerated > ago(24h)\n| where ResourceProvider == \"MICROSOFT.CDN\" and Category has \"FrontDoorAccessLog\"\n| summarize requests=count(), p95=percentile(TimeTaken_s,95) by bin(TimeGenerated, 15m)\n| render timechart",
+        "size": 1,
+        "title": "Front Door access p95"
+      }
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Errors & Failures"
+      }
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "exceptions\n| where timestamp > ago(24h)\n| summarize count() by type, innermostMessage\n| top 20 by count_ desc",
+        "size": 0,
+        "title": "Top exceptions (App Insights)"
+      }
+    }
+  ],
+  "fallbackResourceIds": [
+    "<replace-with-your-log-analytics-resource-id>"
+  ],
+  "styleSettings": {}
+}

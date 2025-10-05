@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+pydantic
+azure-identity
+azure-search-documents
+azure-cosmos
+azure-ai-contentsafety
+openai
+redis[hiredis]
+httpx
+google-adk
+litellm
+opentelemetry-sdk
+opentelemetry-exporter-otlp
+azure-monitor-opentelemetry
+pyodbc

@@ -1,0 +1,120 @@
+{
+  "products": [
+    {
+      "id": "acme-crm-pro",
+      "name": "AcmeCRM Pro",
+      "category": "Customer Relationship Management",
+      "description": "Advanced CRM platform with AI-powered lead scoring and automated workflows",
+      "pricing": {
+        "starter": "$99/user/month",
+        "professional": "$199/user/month",
+        "enterprise": "$399/user/month"
+      },
+      "features": [
+        "AI-powered lead scoring",
+        "Automated email campaigns",
+        "Advanced analytics dashboard",
+        "Mobile app with offline sync",
+        "Third-party integrations"
+      ],
+      "launch_date": "2023-03-15",
+      "customers": 1250,
+      "revenue_contribution": "35%"
+    },
+    {
+      "id": "acme-ai-platform",
+      "name": "AcmeAI Platform",
+      "category": "Artificial Intelligence",
+      "description": "Comprehensive AI platform for business automation and insights",
+      "pricing": {
+        "basic": "$500/month",
+        "standard": "$2000/month",
+        "premium": "$5000/month"
+      },
+      "features": [
+        "Natural language processing",
+        "Predictive analytics",
+        "Computer vision capabilities",
+        "Custom model training",
+        "Real-time inference API"
+      ],
+      "launch_date": "2024-01-10",
+      "customers": 89,
+      "revenue_contribution": "25%"
+    },
+    {
+      "id": "acme-cloud-suite",
+      "name": "AcmeCloud Suite",
+      "category": "Cloud Infrastructure",
+      "description": "Complete cloud management and deployment platform",
+      "pricing": {
+        "starter": "$299/month",
+        "professional": "$799/month",
+        "enterprise": "$1999/month"
+      },
+      "features": [
+        "Multi-cloud management",
+        "Automated scaling",
+        "Cost optimization",
+        "Security monitoring",
+        "DevOps automation"
+      ],
+      "launch_date": "2022-09-01",
+      "customers": 456,
+      "revenue_contribution": "28%"
+    }
+  ],
+  "services": [
+    {
+      "id": "implementation-services",
+      "name": "Implementation Services",
+      "description": "End-to-end implementation and customization of Acme solutions",
+      "pricing": "$150-300/hour",
+      "duration": "2-12 weeks",
+      "specializations": [
+        "CRM implementation",
+        "AI model deployment",
+        "Cloud migration",
+        "Data integration"
+      ]
+    },
+    {
+      "id": "consulting-services",
+      "name": "Strategic Consulting",
+      "description": "Business strategy and technology roadmap consulting",
+      "pricing": "$200-500/hour",
+      "duration": "1-6 months",
+      "specializations": [
+        "Digital transformation",
+        "AI strategy",
+        "Cloud architecture",
+        "Process optimization"
+      ]
+    },
+    {
+      "id": "support-services",
+      "name": "Premium Support",
+      "description": "24/7 technical support and maintenance services",
+      "pricing": "$50-200/user/month",
+      "sla": "99.9% uptime",
+      "features": [
+        "24/7 phone and email support",
+        "Priority bug fixes",
+        "Performance optimization",
+        "Regular health checks"
+      ]
+    }
+  ],
+  "market_analysis": {
+    "total_addressable_market": "$45.2B",
+    "serviceable_addressable_market": "$8.7B",
+    "current_market_share": "0.15%",
+    "growth_rate": "12% annually",
+    "key_trends": [
+      "AI adoption accelerating",
+      "Cloud-first strategies",
+      "Remote work solutions",
+      "Data privacy regulations"
+    ]
+  }
+}
