@@ -3,8 +3,12 @@
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
 [![Azure](https://img.shields.io/badge/azure-ready-blue.svg)](https://azure.microsoft.com)
 [![ADK](https://img.shields.io/badge/google-adk-compliant-green.svg)](https://google.github.io/adk-docs/)
+[![Elephant](https://img.shields.io/badge/🐘-intelligent%20memory-blue.svg)](https://github.com/DanielMercado60660/azure-rag-agent-adk)
 
-Example implementation of an advanced multi-tenant Retrieval-Augmented Generation (RAG) agent built with **Google Agent Development Kit (ADK)** and Azure services.
+
+Hi Rami & Saher!
+
+This is an example implementation of an advanced multi-tenant Retrieval-Augmented Generation (RAG) agent built with **Google Agent Development Kit (ADK)** and Azure services.
 
 ![Azure RAG Agent with ADK](./assets/AzureADKLebElephant.png)
 
