@@ -1,14 +1,14 @@
 """
 Core infrastructure for Azure RAG Agent
 """
-from .clients import AzureClients, clients
+from .clients import AzureClients, get_clients
 from .cache import CacheManager, cache_manager
 from .circuit_breaker import CircuitBreaker, BreakerState, circuit_breaker
 from .cost_tracking import CostMeter
 
 __all__ = [
     "AzureClients",
-    "clients",
+    "get_clients",
     "CacheManager",
     "cache_manager",
     "CircuitBreaker",

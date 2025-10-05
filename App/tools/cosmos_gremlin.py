@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Tuple
 from google.adk.tools import BaseTool
 from gremlin_python.driver import client as gremlin_client
 
-from ..core import clients, cache_manager
+from ..core import get_clients, cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
@@ -70,7 +70,7 @@ class CosmosGremlinTool(BaseTool):
                 'g',
                 username=f"/dbs/{config.COSMOS_DATABASE}/colls/{tenant_id}-graph",
                 token=await asyncio.to_thread(
-                    clients.credential.get_token,
+                    get_clients().credential.get_token,
                     'https://cosmos.azure.com/.default'
                 )
             )
@@ -124,7 +124,7 @@ class CosmosGremlinTool(BaseTool):
         ADK Best Practice: Use small, fast LLM for query translation
         to minimize cost and latency in tool execution.
         """
-        response = clients.openai_client.chat.completions.create(
+        response = get_clients().openai_client.chat.completions.create(
             model=config.GPT4O_MINI_DEPLOYMENT,
             messages=[
                 {

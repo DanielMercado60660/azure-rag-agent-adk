@@ -4,8 +4,16 @@ Implements ADK LlmAgent for query intent and complexity classification
 """
 from google.adk.agents import LlmAgent
 from google.adk.models.lite_llm import LiteLlm
+from pydantic import BaseModel
 
 from ..config import config
+
+
+class ClassificationOutput(BaseModel):
+    """Pydantic model for the classifier's output."""
+    intent: str
+    complexity: str
+    domain: str
 
 
 def create_classifier_agent() -> LlmAgent:
@@ -38,13 +46,6 @@ def create_classifier_agent() -> LlmAgent:
 
 Respond ONLY with JSON:
 {"intent": "...", "complexity": "...", "domain": "..."}""",
-        output_schema={
-            "type": "object",
-            "properties": {
-                "intent": {"type": "string"},
-                "complexity": {"type": "string"},
-                "domain": {"type": "string"}
-            }
-        },
+        output_schema=ClassificationOutput,
         output_key="classification"
     )

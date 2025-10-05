@@ -30,12 +30,13 @@ class ToolExecutionAgent(BaseAgent):
     - Timeout enforcement per tool
     - Quality gate validation
     """
+    tools: Dict[str, BaseTool]
 
     def __init__(self, tools: Dict[str, BaseTool]):
-        self.tools = tools
         super().__init__(
             name="executor",
-            description="Executes tools with budget tracking and circuit breaking"
+            description="Executes tools with budget tracking and circuit breaking",
+            tools=tools
         )
 
     async def _run_async_impl(self, ctx: Any, **kwargs) -> Any:

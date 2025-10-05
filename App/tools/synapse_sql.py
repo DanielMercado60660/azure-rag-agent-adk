@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Tuple
 from google.adk.tools import BaseTool
 import pyodbc
 
-from ..core import clients, cache_manager
+from ..core import get_clients, cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
@@ -138,7 +138,7 @@ class SynapseSQLTool(BaseTool):
         ADK Best Practice: Use small LLM for query translation
         to minimize cost in tool execution.
         """
-        response = clients.openai_client.chat.completions.create(
+        response = get_clients().openai_client.chat.completions.create(
             model=config.GPT4O_MINI_DEPLOYMENT,
             messages=[
                 {

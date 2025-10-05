@@ -16,7 +16,7 @@ from google.adk.sessions import Session
 
 from .models import QueryRequest, QueryResponse
 from ..config import config
-from ..core import clients, cache_manager
+from ..core import get_clients, cache_manager
 from ..tools import AzureAISearchTool, CosmosGremlinTool, SynapseSQLTool, WebSearchTool
 from ..agents import create_classifier_agent
 from ..workflows import (
@@ -47,10 +47,10 @@ tracer = trace.get_tracer(__name__)
 # Initialize tools (shared across all workflows)
 # ADK Best Practice: Reuse tool instances across requests
 tools = {
-    "azure_ai_search": AzureAISearchTool(),
-    "cosmos_gremlin": CosmosGremlinTool(),
-    "synapse_sql": SynapseSQLTool(),
-    "web_search": WebSearchTool()
+    "azure_ai_search": AzureAISearchTool(name=AzureAISearchTool.name, description=AzureAISearchTool.description),
+    "cosmos_gremlin": CosmosGremlinTool(name=CosmosGremlinTool.name, description=CosmosGremlinTool.description),
+    "synapse_sql": SynapseSQLTool(name=SynapseSQLTool.name, description=SynapseSQLTool.description),
+    "web_search": WebSearchTool(name=WebSearchTool.name, description=WebSearchTool.description)
 }
 
 # Default workflow (dynamically selected per query)
@@ -229,7 +229,7 @@ def _result_count_for_response(result: Dict[str, Any]) -> int:
 async def _check_redis() -> bool:
     """Check Redis connectivity"""
     try:
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         await redis_client.ping()
         return True
     except Exception as e:
@@ -240,7 +240,7 @@ async def _check_redis() -> bool:
 async def _check_openai() -> bool:
     """Check OpenAI connectivity"""
     try:
-        response = clients.openai_client.chat.completions.create(
+        response = get_clients().openai_client.chat.completions.create(
             model=config.GPT4O_MINI_DEPLOYMENT,
             messages=[{"role": "user", "content": "test"}],
             max_tokens=1
@@ -254,9 +254,9 @@ async def _check_openai() -> bool:
 async def _check_search() -> bool:
     """Check AI Search connectivity"""
     try:
-        search_client = clients.get_search_client("test-tenant")
-        results = search_client.search(search_text="test", top=1)
-        list(results)  # Consume iterator
+        # List indexes to verify service is available
+        async for _ in get_clients().search_index_client.list_index_names():
+            break  # We only need to know we can connect and list
         return True
     except Exception as e:
         logger.error(f"Search health check failed: {e}")

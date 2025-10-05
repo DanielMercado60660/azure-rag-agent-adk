@@ -7,7 +7,7 @@ from typing import Tuple, List
 
 from azure.ai.contentsafety.models import AnalyzeTextOptions
 
-from ..core import clients
+from ..core import get_clients
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ async def check_content_safety(text: str) -> Tuple[bool, List[str]]:
     """
     try:
         request = AnalyzeTextOptions(text=text)
-        result = clients.content_safety_client.analyze_text(request)
+        result = get_clients().content_safety_client.analyze_text(request)
 
         # Check severity thresholds
         reasons = []

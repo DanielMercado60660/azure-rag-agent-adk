@@ -14,3 +14,4 @@ opentelemetry-sdk
 opentelemetry-exporter-otlp
 azure-monitor-opentelemetry
 pyodbc
+gremlinpython
