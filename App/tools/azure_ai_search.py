@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 from google.adk.tools import BaseTool
 from azure.search.documents.models import VectorizedQuery
 
-from ..core import clients, cache_manager
+from ..core import get_clients, cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
@@ -66,10 +66,10 @@ class AzureAISearchTool(BaseTool):
         logger.info(f"Cache miss for {self.name}: {params_hash[:8]}")
 
         try:
-            search_client = clients.get_search_client(tenant_id)
+            search_client = get_clients().get_search_client(tenant_id)
 
             # Generate embeddings
-            embedding_response = clients.openai_client.embeddings.create(
+            embedding_response = get_clients().openai_client.embeddings.create(
                 model=config.EMBEDDING_DEPLOYMENT,
                 input=query
             )

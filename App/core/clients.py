@@ -5,6 +5,7 @@ Follows ADK best practice for resource management and credential handling
 import logging
 from azure.identity import DefaultAzureCredential
 from azure.search.documents import SearchClient
+from azure.search.documents.indexes.aio import SearchIndexClient
 from azure.cosmos import CosmosClient
 from openai import AzureOpenAI
 from azure.ai.contentsafety import ContentSafetyClient
@@ -50,6 +51,13 @@ class AzureClients:
         # Cosmos DB client
         self.cosmos_client = CosmosClient(config.COSMOS_ENDPOINT, self.credential)
         logger.info("Cosmos DB client initialized")
+
+        # Search Index client
+        self.search_index_client = SearchIndexClient(
+            endpoint=config.SEARCH_ENDPOINT,
+            credential=self.credential
+        )
+        logger.info("Search Index client initialized")
 
         # Redis (initialized async on first use)
         self._redis_client = None
@@ -100,15 +108,24 @@ class AzureClients:
 
 
 # Global singleton instance
-clients = AzureClients()
+_clients_instance = None
 
-# Configure LiteLLM for Azure OpenAI authentication
-# ADK + Azure Best Practice: Set up LiteLLM to use Azure AD tokens
-import os
-if not os.getenv("AZURE_API_KEY"):
-    try:
-        token = clients.credential.get_token("https://cognitiveservices.azure.com/.default").token
-        os.environ["AZURE_API_KEY"] = token
-        logger.info("Set AZURE_API_KEY from DefaultAzureCredential for LiteLLM")
-    except Exception as e:
-        logger.warning(f"Could not get Azure AD token for LiteLLM: {e}")
+def get_clients() -> AzureClients:
+    """
+    Factory function for the AzureClients singleton.
+    Initializes the clients on first call.
+    """
+    global _clients_instance
+    if _clients_instance is None:
+        _clients_instance = AzureClients()
+        # Configure LiteLLM for Azure OpenAI authentication
+        # ADK + Azure Best Practice: Set up LiteLLM to use Azure AD tokens
+        import os
+        if not os.getenv("AZURE_API_KEY"):
+            try:
+                token = _clients_instance.credential.get_token("https://cognitiveservices.azure.com/.default").token
+                os.environ["AZURE_API_KEY"] = token
+                logger.info("Set AZURE_API_KEY from DefaultAzureCredential for LiteLLM")
+            except Exception as e:
+                logger.warning(f"Could not get Azure AD token for LiteLLM: {e}")
+    return _clients_instance

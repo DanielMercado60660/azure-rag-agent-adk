@@ -4,8 +4,18 @@ Implements ADK LlmAgent for execution strategy planning
 """
 from google.adk.agents import LlmAgent
 from google.adk.models.lite_llm import LiteLlm
+from pydantic import BaseModel
+from typing import List
 
 from ..config import config
+
+
+class PlannerOutput(BaseModel):
+    """Pydantic model for the planner's output."""
+    strategy_type: str
+    tools: List[str]
+    execution_mode: str
+    reasoning: str
 
 
 def create_planner_agent() -> LlmAgent:
@@ -58,14 +68,6 @@ Respond ONLY with JSON:
     "execution_mode": "sequential|parallel",
     "reasoning": "brief explanation"
 }""",
-        output_schema={
-            "type": "object",
-            "properties": {
-                "strategy_type": {"type": "string"},
-                "tools": {"type": "array"},
-                "execution_mode": {"type": "string"},
-                "reasoning": {"type": "string"}
-            }
-        },
+        output_schema=PlannerOutput,
         output_key="strategy"
     )

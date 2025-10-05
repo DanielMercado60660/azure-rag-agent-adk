@@ -6,7 +6,7 @@ import logging
 from typing import Optional, Dict
 import json
 
-from .clients import clients
+from .clients import get_clients
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class CacheManager:
         ADK Best Practice: Cache complete responses to avoid
         re-executing entire agent workflows for identical queries.
         """
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         cached = await redis_client.get(f"response:{query_hash}")
         if cached:
             logger.info(f"Response cache hit: {query_hash[:8]}")
@@ -45,7 +45,7 @@ class CacheManager:
 
     async def set_response(self, query_hash: str, response: str):
         """Cache complete response"""
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         await redis_client.setex(
             f"response:{query_hash}",
             self.ttls["response"],
@@ -60,7 +60,7 @@ class CacheManager:
         ADK Best Practice: Cache individual tool results to enable
         partial cache hits in multi-tool agent workflows.
         """
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         key = f"tool:{tool_name}:{params_hash}"
         cached = await redis_client.get(key)
         if cached:
@@ -70,7 +70,7 @@ class CacheManager:
 
     async def set_tool_result(self, tool_name: str, params_hash: str, result: Dict):
         """Cache tool result with tool-specific TTL"""
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         key = f"tool:{tool_name}:{params_hash}"
         ttl = self.ttls.get(f"tool_{tool_name}", 600)
         await redis_client.setex(key, ttl, json.dumps(result))
@@ -83,7 +83,7 @@ class CacheManager:
         ADK Best Practice: Store session state in external cache
         for stateless agent deployments.
         """
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         key = f"session:{session_id}"
         cached = await redis_client.get(key)
         if cached:
@@ -95,7 +95,7 @@ class CacheManager:
 
     async def set_session(self, session_id: str, context: Dict):
         """Store session context"""
-        redis_client = await clients.get_redis()
+        redis_client = await get_clients().get_redis()
         await redis_client.setex(
             f"session:{session_id}",
             self.ttls["session"],
