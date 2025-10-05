@@ -74,6 +74,18 @@ curl -X POST http://localhost:8080/query \
   }'
 ```
 
+### Test with ADK Web UI
+
+```bash
+# Install ADK
+pip install google-adk
+
+# Start ADK web UI for interactive testing
+adk web App.agent
+```
+
+This will open a web interface where you can test your agent interactively with different queries and see the workflow selection in action.
+
 ## Architecture
 
 For detailed architecture diagrams and system design, see [ARCHITECTURE.md](./docs/ARCHITECTURE.md).
