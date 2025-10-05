@@ -4,14 +4,14 @@
 [![Azure](https://img.shields.io/badge/azure-ready-blue.svg)](https://azure.microsoft.com)
 [![ADK](https://img.shields.io/badge/google-adk-compliant-green.svg)](https://google.github.io/adk-docs/)
 
-Production-grade, multi-tenant Retrieval-Augmented Generation (RAG) agent built with **Google Agent Development Kit (ADK)** and Azure services.
+Example implementation of an advanced multi-tenant Retrieval-Augmented Generation (RAG) agent built with **Google Agent Development Kit (ADK)** and Azure services.
 
 ![Azure RAG Agent with ADK](./assets/AzureADKLebElephant.png)
 
 
 ## Overview
 
-This agent dynamically selects optimal workflow patterns based on query complexity:
+This is an example implementation of an advanced RAG agent that demonstrates how to build a sophisticated retrieval system using multiple data sources. The agent dynamically selects optimal workflow patterns based on query complexity:
 
 - **Sequential Pipeline** - For simple, direct queries
 - **Parallel Fan-Out/Gather** - For medium complexity with concurrent tool execution
@@ -21,9 +21,9 @@ This agent dynamically selects optimal workflow patterns based on query complexi
 
 ✅ **ADK-Compliant Architecture** - Follows official Google ADK patterns for multi-agent orchestration
 ✅ **LiteLLM Integration** - Uses ADK's LiteLLM wrapper for Azure OpenAI with Entra ID auth
-✅ **Enterprise-Grade** - Multi-tenancy, budget tracking, circuit breakers, caching
+✅ **Multi-Source Retrieval** - Combines vector search, SQL analytics, graph traversal, and web search
 ✅ **Azure Native** - AI Search (semantic ranking), Cosmos Gremlin, Synapse SQL, OpenAI
-✅ **Production Ready** - Content safety, observability, timeout enforcement, cost tracking
+✅ **Business Features** - Multi-tenancy, budget tracking, circuit breakers, caching, content safety
 
 ## 🚀 Quick Start
 
@@ -205,7 +205,7 @@ cd App && uvicorn agent:app --reload
 
 - **ADK Compliance**: All agents follow Google ADK patterns
 - **Modular Design**: Clear separation of concerns
-- **Production Ready**: Circuit breakers, caching, cost tracking
+- **Business Features**: Circuit breakers, caching, cost tracking, multi-tenancy
 
 ## 📊 Monitoring
 
