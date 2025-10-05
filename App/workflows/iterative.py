@@ -67,7 +67,7 @@ def create_iterative_refinement(tools: Dict[str, BaseTool]) -> SequentialAgent:
         description="RAG with iterative refinement for complex queries",
         sub_agents=[
             create_classifier_agent(),
-            create_planner_agent(),
+            create_planner_agent(tools),
             refinement_loop,
             create_synthesizer_agent()
         ]

@@ -41,7 +41,7 @@ def create_sequential_pipeline(tools: Dict[str, BaseTool]) -> SequentialAgent:
         description="Sequential RAG pipeline for simple queries",
         sub_agents=[
             create_classifier_agent(),
-            create_planner_agent(),
+            create_planner_agent(tools),
             ToolExecutionAgent(tools),
             QualityGateAgent(),
             create_synthesizer_agent()

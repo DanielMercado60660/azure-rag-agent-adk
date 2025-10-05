@@ -47,7 +47,7 @@ def create_parallel_fanout_gather(tools: Dict[str, BaseTool]) -> SequentialAgent
         description="RAG with parallel tool execution for medium complexity",
         sub_agents=[
             create_classifier_agent(),
-            create_planner_agent(),
+            create_planner_agent(tools),
             ToolExecutionAgent(tools),  # Executes in parallel based on strategy
             QualityGateAgent(),
             create_synthesizer_agent()

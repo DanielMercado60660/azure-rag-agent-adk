@@ -4,8 +4,9 @@ Implements ADK LlmAgent for execution strategy planning
 """
 from google.adk.agents import LlmAgent
 from google.adk.models.lite_llm import LiteLlm
+from google.adk.tools import BaseTool
 from pydantic import BaseModel
-from typing import List
+from typing import Dict, List
 
 from ..config import config
 
@@ -18,7 +19,7 @@ class PlannerOutput(BaseModel):
     reasoning: str
 
 
-def create_planner_agent() -> LlmAgent:
+def create_planner_agent(tools: Dict[str, BaseTool]) -> LlmAgent:
     """
     Create strategy planning agent.
 
@@ -33,24 +34,19 @@ def create_planner_agent() -> LlmAgent:
     Returns:
         LlmAgent configured for strategy planning
     """
-    return LlmAgent(
-        name="planner",
-        model=LiteLlm(
-            model=f"azure/{config.GPT4O_DEPLOYMENT}",
-            api_base=config.OPENAI_ENDPOINT,
-            api_version=config.OPENAI_API_VERSION
-        ),
-        description="Creates execution strategy within budget constraints",
-        instruction="""Create execution strategy for the query: {query}
+    # ADK Best Practice: Dynamically generate tool list for planner prompt
+    # to ensure it's always up-to-date and reduce maintenance.
+    tool_descriptions = "\n".join(
+        [f"- {name}: {tool.description}" for name, tool in tools.items()]
+    )
 
-Classification: {classification}
-Max tools allowed: {max_tools}
+    instruction = f"""Create execution strategy for the query: {{query}}
+
+Classification: {{classification}}
+Max tools allowed: {{max_tools}}
 
 Available tools:
-- azure_ai_search: Vector + BM25 hybrid search
-- cosmos_gremlin: Graph relationships
-- synapse_sql: Analytics queries
-- web_search: Current external info
+{tool_descriptions}
 
 Strategy types:
 - direct: Single tool, simple lookup
@@ -62,12 +58,22 @@ Execution modes:
 - parallel: Independent tools run simultaneously
 
 Respond ONLY with JSON:
-{
+{{
     "strategy_type": "direct|multi-source|iterative",
     "tools": ["tool1", "tool2"],
     "execution_mode": "sequential|parallel",
     "reasoning": "brief explanation"
-}""",
+}}"""
+
+    return LlmAgent(
+        name="planner",
+        model=LiteLlm(
+            model=f"azure/{config.GPT4O_DEPLOYMENT}",
+            api_base=config.OPENAI_ENDPOINT,
+            api_version=config.OPENAI_API_VERSION
+        ),
+        description="Creates execution strategy within budget constraints",
+        instruction=instruction,
         output_schema=PlannerOutput,
         output_key="strategy"
     )

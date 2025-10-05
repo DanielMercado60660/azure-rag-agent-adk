@@ -7,16 +7,16 @@ import time
 import hashlib
 from typing import Any, Dict, List, Tuple
 
-from google.adk.tools import BaseTool
 import pyodbc
 
+from .extended_base_tool import ExtendedBaseTool
 from ..core import get_clients, cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
 
 
-class SynapseSQLTool(BaseTool):
+class SynapseSQLTool(ExtendedBaseTool):
     """
     Synapse Serverless SQL analytics tool.
 
@@ -29,6 +29,7 @@ class SynapseSQLTool(BaseTool):
         "Execute SQL analytics for trends, aggregations, and data analysis. "
         "Use for 'trend', 'graph', 'chart', 'compare' queries."
     )
+    timeout_seconds: int = 45
 
     async def run_async(self, **kwargs) -> Dict[str, Any]:
         """

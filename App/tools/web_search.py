@@ -7,15 +7,14 @@ import time
 import hashlib
 from typing import Any, Dict
 
-from google.adk.tools import BaseTool
-
+from .extended_base_tool import ExtendedBaseTool
 from ..core import cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
 
 
-class WebSearchTool(BaseTool):
+class WebSearchTool(ExtendedBaseTool):
     """
     Bing Web Search for current information.
 
@@ -28,6 +27,7 @@ class WebSearchTool(BaseTool):
         "Search the web for current information and external data. "
         "Use for recent events, news, or information beyond knowledge cutoff."
     )
+    timeout_seconds: int = 10
 
     async def run_async(self, **kwargs) -> Dict[str, Any]:
         """
@@ -63,8 +63,7 @@ class WebSearchTool(BaseTool):
                 response = await client.get(
                     "https://api.bing.microsoft.com/v7.0/search",
                     headers={"Ocp-Apim-Subscription-Key": config.BING_SEARCH_KEY},
-                    params={"q": query, "count": max_results},
-                    timeout=config.TIMEOUT_WEB
+                    params={"q": query, "count": max_results}
                 )
 
             data = response.json()

@@ -7,16 +7,16 @@ import time
 import hashlib
 from typing import Any, Dict, List
 
-from google.adk.tools import BaseTool
 from azure.search.documents.models import VectorizedQuery
 
+from .extended_base_tool import ExtendedBaseTool
 from ..core import get_clients, cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
 
 
-class AzureAISearchTool(BaseTool):
+class AzureAISearchTool(ExtendedBaseTool):
     """
     Azure AI Search with hybrid vector + BM25 search and semantic reranking.
 
@@ -29,6 +29,7 @@ class AzureAISearchTool(BaseTool):
         "Search knowledge base using hybrid vector + BM25 search with semantic reranking. "
         "Use for document retrieval, semantic search, and finding relevant information."
     )
+    timeout_seconds: int = 15
 
     async def run_async(self, **kwargs) -> Dict[str, Any]:
         """

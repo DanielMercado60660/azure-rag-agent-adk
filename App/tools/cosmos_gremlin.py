@@ -8,16 +8,16 @@ import hashlib
 import asyncio
 from typing import Any, Dict, List, Tuple
 
-from google.adk.tools import BaseTool
 from gremlin_python.driver import client as gremlin_client
 
+from .extended_base_tool import ExtendedBaseTool
 from ..core import get_clients, cache_manager
 from ..config import config
 
 logger = logging.getLogger(__name__)
 
 
-class CosmosGremlinTool(BaseTool):
+class CosmosGremlinTool(ExtendedBaseTool):
     """
     Cosmos DB Gremlin graph traversal tool.
 
@@ -30,6 +30,7 @@ class CosmosGremlinTool(BaseTool):
         "Query knowledge graph for relationships and connections. "
         "Use for 'related to', 'connected to', 'impact of' queries."
     )
+    timeout_seconds: int = 25
 
     async def run_async(self, **kwargs) -> Dict[str, Any]:
         """

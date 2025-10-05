@@ -160,14 +160,8 @@ class ToolExecutionAgent(BaseAgent):
                 logger.warning(f"Circuit open for {tool_name}")
                 return {"status": "circuit_open", "tool_name": tool_name}
 
-            # Determine timeout based on tool type
-            timeout_map = {
-                "azure_ai_search": config.TIMEOUT_SEARCH,
-                "cosmos_gremlin": config.TIMEOUT_GRAPH,
-                "synapse_sql": config.TIMEOUT_SQL,
-                "web_search": config.TIMEOUT_WEB
-            }
-            timeout = timeout_map.get(tool_name, config.TIMEOUT_SEARCH)
+            # Use tool-defined timeout (ADK best practice)
+            timeout = getattr(tool, "timeout_seconds", 20)  # Default to 20s
 
             # Execute tool with timeout
             result = await asyncio.wait_for(
