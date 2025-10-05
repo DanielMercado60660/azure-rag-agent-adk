@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
 [![Azure](https://img.shields.io/badge/azure-ready-blue.svg)](https://azure.microsoft.com)
-[![ADK](https://img.shields.io/badge/google-adk-compliant-green.svg)](https://google.github.io/adk-docs/)
 [![Elephant](https://img.shields.io/badge/🐘-intelligent%20memory-blue.svg)](https://github.com/DanielMercado60660/azure-rag-agent-adk)
 
 
@@ -23,11 +22,15 @@ This is an example implementation of an advanced RAG agent that demonstrates how
 
 ## Key Features
 
-✅ **ADK-Compliant Architecture** - Follows official Google ADK patterns for multi-agent orchestration
-✅ **LiteLLM Integration** - Uses ADK's LiteLLM wrapper for Azure OpenAI with Entra ID auth
-✅ **Multi-Source Retrieval** - Combines vector search, SQL analytics, graph traversal, and web search
-✅ **Azure Native** - AI Search (semantic ranking), Cosmos Gremlin, Synapse SQL, OpenAI
-✅ **Business Features** - Multi-tenancy, budget tracking, circuit breakers, caching, content safety
+**ADK-Compliant Architecture** - Follows official Google ADK patterns for multi-agent orchestration
+
+**LiteLLM Integration** - Uses ADK's LiteLLM wrapper for Azure OpenAI with Entra ID auth
+
+**Multi-Source Retrieval** - Combines vector search, SQL analytics, graph traversal, and web search
+
+**Azure Native** - AI Search (semantic ranking), Cosmos Gremlin, Synapse SQL, OpenAI
+
+**Business Features** - Multi-tenancy, budget tracking, circuit breakers, caching, content safety
 
 ## 🚀 Quick Start
 
